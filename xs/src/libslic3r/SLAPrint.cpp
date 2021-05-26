@@ -6,6 +6,7 @@
 #include "Surface.hpp"
 #include <iostream>
 #include <complex>
+#include <boost/bind/bind.hpp>
 #include <cstdio>
 
 namespace Slic3r {
@@ -67,7 +68,7 @@ SLAPrint::slice()
         parallelize<size_t>(
             0,
             this->layers.size()-1,
-            boost::bind(&SLAPrint::_infill_layer, this, _1, fill.get()),
+            boost::bind(&SLAPrint::_infill_layer, this, boost::placeholders::_1, fill.get()),
             this->config.threads.value
         );
     }

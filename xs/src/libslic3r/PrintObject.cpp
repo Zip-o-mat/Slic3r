@@ -3,6 +3,7 @@
 #include "ClipperUtils.hpp"
 #include "Geometry.hpp"
 #include <algorithm>
+#include <boost/bind/bind.hpp>
 #include <vector>
 #include "SVG.hpp"
 
@@ -345,7 +346,7 @@ PrintObject::detect_surfaces_type()
 
     parallelize<Layer*>(
         std::queue<Layer*>(std::deque<Layer*>(this->layers.begin(), this->layers.end())),  // cast LayerPtrs to std::queue<Layer*>
-        boost::bind(&Slic3r::Layer::detect_surfaces_type, _1),
+        boost::bind(&Slic3r::Layer::detect_surfaces_type, boost::placeholders::_1),
         this->_print->config.threads.value
     );
 
@@ -612,7 +613,7 @@ PrintObject::project_nonplanar_surfaces()
     this->state.set_started(posNonplanarProjection);
     parallelize<Layer*>(
         std::queue<Layer*>(std::deque<Layer*>(this->layers.begin(), this->layers.end())),  // cast LayerPtrs to std::queue<Layer*>
-        boost::bind(&Slic3r::Layer::project_nonplanar_surfaces, _1),
+        boost::bind(&Slic3r::Layer::project_nonplanar_surfaces, boost::placeholders::_1),
         this->_print->config.threads.value
     );
 
@@ -624,7 +625,7 @@ PrintObject::process_external_surfaces()
 {
     parallelize<Layer*>(
         std::queue<Layer*>(std::deque<Layer*>(this->layers.begin(), this->layers.end())),  // cast LayerPtrs to std::queue<Layer*>
-        boost::bind(&Slic3r::Layer::process_external_surfaces, _1),
+        boost::bind(&Slic3r::Layer::process_external_surfaces, boost::placeholders::_1),
         this->_print->config.threads.value
     );
 }
@@ -1394,7 +1395,7 @@ PrintObject::_make_perimeters()
 
     parallelize<Layer*>(
         std::queue<Layer*>(std::deque<Layer*>(this->layers.begin(), this->layers.end())),  // cast LayerPtrs to std::queue<Layer*>
-        boost::bind(&Slic3r::Layer::make_perimeters, _1),
+        boost::bind(&Slic3r::Layer::make_perimeters, boost::placeholders::_1),
         this->_print->config.threads.value
     );
 
@@ -1416,7 +1417,7 @@ PrintObject::_infill()
 
     parallelize<Layer*>(
         std::queue<Layer*>(std::deque<Layer*>(this->layers.begin(), this->layers.end())),  // cast LayerPtrs to std::queue<Layer*>
-        boost::bind(&Slic3r::Layer::make_fills, _1),
+        boost::bind(&Slic3r::Layer::make_fills, boost::placeholders::_1),
         this->_print->config.threads.value
     );
 
